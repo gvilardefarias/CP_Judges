@@ -3,44 +3,42 @@
 using namespace std;
 
 int main(){
-    int n, m;
+    int n, m, *p;
 
     scanf("%d %d", &n, &m);
 
-    bool p[n+1];
+    p = (int*) calloc(n+1, sizeof(int));
+
+    p[0] = -2;
+
 
     for(int i=1;i<=n;i++){
-        if(i<=m)
-            p[i] = 1;
-        else{
-            int aux = 0;
+             
+            int cont = 0, aux;
 
-            for(int j=i-1;j>=i-m && i>=0;j--)
-                if(!p[j])
-                    aux++;
+            for(int j=i-1;j>=i-m && j>=0;j--){
+                if(p[j]==i-j || p[j]==-2){
+                    cont++;
+                    aux = i-j;
+                }
+            }
 
-            if(aux>1)
-                p[i] = 1;
+            if(cont==1)
+                p[i] = aux;
             else
-                p[i] = 0;
-        }
+                if(cont>1)
+                    p[i] = -1;
+                else
+                    p[i] = -2;
+        
     }
 
-    bool aux = 0;
-
-    for(int i=n;i>n-m && i>=0;i--)
-        if(!p[i]){
-            aux = 1;
-            break;
-        }
-
-    if(aux)
+    if(p[n]>=1 || p[n]==-1)
         printf("Paula\n");
     else
         printf("Carlos\n");
 
-    for(int i=1;i<=n;i++)
-        printf("%d\n", p[i]);
+    free(p);
 
     return 0;
 }
